@@ -67,6 +67,7 @@
         }
     },
     "require-dev": {
+        "symfony/maker-bundle": "^1.32",
         "symfony/web-server-bundle": "4.4.*"
     }
 }
