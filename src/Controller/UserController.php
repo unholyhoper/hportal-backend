@@ -15,7 +15,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 class UserController extends AbstractFOSRestController
 {
     /**
-     * Lists all Movies.
+     * Lists all Users.
      * @Rest\Get("/users")
      *
      * @return Response
@@ -27,37 +27,36 @@ class UserController extends AbstractFOSRestController
         return $this->handleView($this->view($movies));
     }
     /**
+     * Get a user.
+     * @Rest\Get("/user/{id}")
+     *
+     * @return Response
+     */
+    public function getUser(Request $request)
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $movies = $repository->find($id);
+        return $this->handleView($this->view($movies));
+    }
+    /**
      * Create Movie.
-     * @Rest\Post("/movie")
+     * @Rest\Post("/user")
      *
      * @return Response
      */
     public function postUser(Request $request)
     {
-        $movie = new User();
-        $form = $this->createForm(UserType::class, $movie);
+        $user = new User();
+        dump($request->getContent());
+        $form = $this->createForm(UserType::class, $user);
         $data = json_decode($request->getContent(), true);
         $form->submit($data);
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->persist($movie);
+            $em->persist($user);
             $em->flush();
             return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
         }
         return $this->handleView($this->view($form->getErrors()));
     }
-//    public function postMovieAction(Request $request)
-//    {
-//        $movie = new Movie();
-//        $form = $this->createForm(MovieType::class, $movie);
-//        $data = json_decode($request->getContent(), true);
-//        $form->submit($data);
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $em = $this->getDoctrine()->getManager();
-//            $em->persist($movie);
-//            $em->flush();
-//            return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
-//        }
-//        return $this->handleView($this->view($form->getErrors()));
-//    }
 }
