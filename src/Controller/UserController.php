@@ -9,7 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Form\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
 /**
- * Movie controller.
+ * User controller.
  * @Route("/api", name="api_")
  */
 class UserController extends AbstractFOSRestController
@@ -26,18 +26,7 @@ class UserController extends AbstractFOSRestController
         $movies = $repository->findall();
         return $this->handleView($this->view($movies));
     }
-    /**
-     * Get a user.
-     * @Rest\Get("/user/{id}")
-     *
-     * @return Response
-     */
-    public function getUser(Request $request)
-    {
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $movies = $repository->find($id);
-        return $this->handleView($this->view($movies));
-    }
+
     /**
      * Create Movie.
      * @Rest\Post("/user")
@@ -59,4 +48,18 @@ class UserController extends AbstractFOSRestController
         }
         return $this->handleView($this->view($form->getErrors()));
     }
+    /**
+     * Lists all Users.
+     * @Rest\Get("/user/{id}")
+     *
+     * @return Response
+     */
+    public function getUser($id): Respone
+    {
+        echo $id;
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $movies = $repository->find(1);
+        return $this->handleView($this->view($movies));
+    }
+
 }
