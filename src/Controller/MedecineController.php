@@ -1,5 +1,6 @@
 <?php
 namespace App\Controller;
+use App\Entity\Medecine;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
@@ -14,17 +15,17 @@ use FOS\RestBundle\Controller\FOSRestController;
  * Movie controller.
  * @Route("/api", name="api_")
  */
-class UserController extends AbstractFOSRestController
+class MedecineController extends AbstractFOSRestController
 {
     /**
      * Lists all Movies.
-     * @Rest\Get("/users")
+     * @Rest\Get("/allMedecines")
      *
      * @return Response
      */
-    public function getUsers()
+    public function allMedecines()
     {
-        $repository = $this->getDoctrine()->getRepository(User::class);
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
         $movies = $repository->findall();
         return $this->handleView($this->view($movies));
     }

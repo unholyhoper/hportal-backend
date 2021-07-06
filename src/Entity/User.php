@@ -49,9 +49,19 @@ class User
     private $country;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="bigint", nullable=true)
      */
-    private $gender;
+    private $phone;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $medicalSerial;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $role;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -135,14 +145,38 @@ class User
         return $this;
     }
 
-    public function getGender(): ?string
+    public function getPhone(): ?string
     {
-        return $this->gender;
+        return $this->phone;
     }
 
-    public function setGender(?string $gender): self
+    public function setPhone(?string $phone): self
     {
-        $this->gender = $gender;
+        $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getMedicalSerial(): ?string
+    {
+        return $this->medicalSerial;
+    }
+
+    public function setMedicalSerial(?string $medicalSerial): self
+    {
+        $this->medicalSerial = $medicalSerial;
+
+        return $this;
+    }
+
+    public function getRole(): ?int
+    {
+        return $this->role;
+    }
+
+    public function setRole(?int $role): self
+    {
+        $this->role = $role;
 
         return $this;
     }

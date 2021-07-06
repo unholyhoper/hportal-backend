@@ -1,7 +1,6 @@
 <?php
 namespace App\Form;
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,11 +13,14 @@ class UserType extends AbstractType
         $builder
             ->add('firstName')
             ->add('lastName')
+            ->add('cin')
             ->add('password')
-            ->add('gender')
-            ->add('email',EmailType::class)
-            ->add('country')
+            ->add('email')
             ->add('address')
+            ->add('country')
+            ->add('phone')
+            ->add('medicalSerial')
+            ->add('role')
             ->add('save', SubmitType::class)
         ;
     }
