@@ -18,7 +18,7 @@ use FOS\RestBundle\Controller\FOSRestController;
 class MedecineController extends AbstractFOSRestController
 {
     /**
-     * Lists all Movies.
+     * Lists all medecines.
      * @Rest\Get("/allMedecines")
      *
      * @return Response
@@ -29,60 +29,54 @@ class MedecineController extends AbstractFOSRestController
         $movies = $repository->findall();
         return $this->handleView($this->view($movies));
     }
+
     /**
-     * Create Movie.
-     * @Rest\Post("/user")
-     *
+     * Get a Medecine by ID.
+     * @Rest\Get("/medecine/{id}")
+     * @param $id
      * @return Response
      */
-    public function postUser(Request $request)
+    public function getMedecineById($id)
     {
-        $movie = new User();
-        $form = $this->createForm(UserType::class, $movie);
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($movie);
-            $em->flush();
-            return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $medecine = $repository->find($id);
+
+        return $this->handleView($this->view($medecine));
+    }
+
+
+    /**
+     * Get a Medecine by ID.
+     * @Rest\Delete("/medecine/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function deleteMedecineById($id)
+    {
+        echo $id;
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $medecine = $repository->find($id);
+        if ($medecine==null){
+            return $this->handleView($this->view(['status' => 'KO'], Response::HTTP_BAD_REQUEST));
         }
-        return $this->handleView($this->view($form->getErrors()));
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($medecine);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'OK'], Response::HTTP_OK));
     }
 
 
-    /**
-     * Create Movie.
-     * @Rest\Get("/user/{id}")
-     * @param $id
-     * @return Response
-     */
-    public function getUserById($id)
-    {
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $user = $repository->find($id);
-
-        return $this->handleView($this->view($user));
-    }
-
-    /**
-     * Create Movie.
-     * @Rest\Get("/countRoles")
-     * @param $id
-     * @return Response
-     */
-    public function getcountRoles(RoleRepository $roleRepository)
-    {
-        $repository = $this->getDoctrine()->getRepository(Role::class);
-        $delegateCount = $roleRepository->countDelegate();
-        $doctorCount = $roleRepository->countDoctors();
-        $clientCount = $roleRepository->countClient();
-        $response = json_encode(array('doctorCount'=>$doctorCount,
-            'delegateCount'=>$delegateCount,
-            'clientCount'=>$clientCount,
-            ));
-        return $this->handleView($this->view($response));
-    }
-
+//    /**
+//     * Get a Medecine by ID.
+//     * @Rest\PUT("/medecine/{id}")
+//     * @param $id
+//     * @return Response
+//     */
+//    public function editMedecineById(Request $request)
+//    {
+//        $data = json_decode($request->getContent(), true);
+//
+//
+//    }
 
 }
