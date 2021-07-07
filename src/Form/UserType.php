@@ -14,13 +14,11 @@ class UserType extends AbstractType
             ->add('firstName')
             ->add('lastName')
             ->add('cin')
-            ->add('password')
             ->add('email')
             ->add('address')
             ->add('country')
             ->add('phone')
             ->add('medicalSerial')
-            ->add('role')
             ->add('save', SubmitType::class)
         ;
     }

@@ -39,13 +39,23 @@ class UserController extends AbstractFOSRestController
         $movie = new User();
         $form = $this->createForm(UserType::class, $movie);
         $data = json_decode($request->getContent(), true);
-        $form->submit($data);
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($movie);
-            $em->flush();
-            return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
-        }
+        $em = $this->getDoctrine()->getManager();
+var_dump($data);
+        $movie->setUsername($data['userName']);
+        $movie->setFirstName($data['firstName']);
+        $movie->setLastName($data['lastName']);
+        $movie->setCin($data['cin']);
+        $movie->setEmail($data['email']);
+        $movie->setAddress($data['address']);
+        $movie->setCountry($data['country']);
+        $movie->setPhone($data['phone']);
+        $movie->setMedicalSerial($data['medicalSerial']);
+        $movie->setPassword($data['password']);
+        $movie->setRoles(array($data['roles']));
+        $em->persist($movie);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+
         return $this->handleView($this->view($form->getErrors()));
     }
 
