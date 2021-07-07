@@ -3,6 +3,7 @@ namespace App\Controller;
 use App\Entity\Medecine;
 use App\Entity\Role;
 use App\Entity\User;
+use App\Form\MedecineType;
 use App\Repository\RoleRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,18 +66,25 @@ class MedecineController extends AbstractFOSRestController
         return $this->handleView($this->view(['status' => 'OK'], Response::HTTP_OK));
     }
 
-
-//    /**
-//     * Get a Medecine by ID.
-//     * @Rest\PUT("/medecine/{id}")
-//     * @param $id
-//     * @return Response
-//     */
-//    public function editMedecineById(Request $request)
-//    {
-//        $data = json_decode($request->getContent(), true);
-//
-//
-//    }
+    /**
+     * Create Movie.
+     * @Rest\Post("/medecine")
+     *
+     * @return Response
+     */
+    public function addmedecine(Request $request)
+    {
+        $movie = new Medecine();
+        $form = $this->createForm(MedecineType::class, $movie);
+        $data = json_decode($request->getContent(), true);
+        $form->submit($data);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($movie);
+            $em->flush();
+            return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+        }
+        return $this->handleView($this->view($form->getErrors()));
+    }
 
 }
