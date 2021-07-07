@@ -76,11 +76,10 @@ class UserController extends AbstractFOSRestController
         $delegateCount = $roleRepository->countDelegate();
         $doctorCount = $roleRepository->countDoctors();
         $clientCount = $roleRepository->countClient();
-        $response = json_encode(array('doctorCount'=>$doctorCount,
+        return $this->handleView($this->view(array('doctorCount'=>$doctorCount,
             'delegateCount'=>$delegateCount,
             'clientCount'=>$clientCount,
-            ));
-        return $this->handleView($this->view($response));
+        )));
     }
 
 

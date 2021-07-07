@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\Medecine;
+use App\Entity\MedicalFolder;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method Medecine|null find($id, $lockMode = null, $lockVersion = null)
- * @method Medecine|null findOneBy(array $criteria, array $orderBy = null)
- * @method Medecine[]    findAll()
- * @method Medecine[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method MedicalFolder|null find($id, $lockMode = null, $lockVersion = null)
+ * @method MedicalFolder|null findOneBy(array $criteria, array $orderBy = null)
+ * @method MedicalFolder[]    findAll()
+ * @method MedicalFolder[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class MedecineRepository extends ServiceEntityRepository
+class MedicalFolderRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Medecine::class);
+        parent::__construct($registry, MedicalFolder::class);
     }
 
     // /**
-    //  * @return Medecine[] Returns an array of Medecine objects
+    //  * @return MedicalFolder[] Returns an array of MedicalFolder objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class MedecineRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?Medecine
+    public function findOneBySomeField($value): ?MedicalFolder
     {
         return $this->createQueryBuilder('m')
             ->andWhere('m.exampleField = :val')
@@ -47,12 +47,4 @@ class MedecineRepository extends ServiceEntityRepository
         ;
     }
     */
-
-    public function countMedecines()
-    {
-        return $this->createQueryBuilder('r')
-            ->select('count(r.id)')
-            ->getQuery()
-            ->getSingleScalarResult();;
-    }
 }

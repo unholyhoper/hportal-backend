@@ -42,6 +42,11 @@ class Medecine
      */
     private $price;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Disease::class, inversedBy="medecines")
+     */
+    private $diseases;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Medecine
     public function setPrice(?float $price): self
     {
         $this->price = $price;
+
+        return $this;
+    }
+
+    public function getDiseases(): ?Disease
+    {
+        return $this->diseases;
+    }
+
+    public function setDiseases(?Disease $diseases): self
+    {
+        $this->diseases = $diseases;
 
         return $this;
     }
