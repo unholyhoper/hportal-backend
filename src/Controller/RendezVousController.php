@@ -28,10 +28,11 @@ class RendezVousController extends AbstractFOSRestController
     public function addmedecine(Request $request)
     {
         $movie = new RendezVous();
+        $movie->setPatient($this->getUser());
         $data = json_decode($request->getContent(), true);
         $movie->setDate(new \DateTime($data['date']));
         $movie->setDescription($data['description']);
-        $movie->setPriority($data['priorite']);
+        $movie->setPriority($data['priority']);
         $movie->setStatus($data['status']);
         $em = $this->getDoctrine()->getManager();
         $em->persist($movie);
@@ -58,10 +59,8 @@ class RendezVousController extends AbstractFOSRestController
      * @param $id
      * @return Response
      */
-    public function updateRendezVous(Request $request, $id)
+    public function updateRendezVousByDoctor(Request $request, $id)
     {
-
-
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $data = json_decode($request->getContent(), true);
         var_dump($data);
@@ -73,6 +72,7 @@ class RendezVousController extends AbstractFOSRestController
         $medecine->setPriority($data['priority']);
         $medecine->setStatus($data['status']);
         $medecine->setDescription($data['description']);
+        $medecine->setDoctor($this->getUser());
         $em = $this->getDoctrine()->getManager();
         $em->persist($medecine);
         $em->flush();
