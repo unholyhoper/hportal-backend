@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\RendezVous;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -47,4 +48,13 @@ class RendezVousRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getAppointmentsForUser(User $user)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r')
+            ->andWhere('r.id = :val')
+            ->setParameter('val', $user->getId())
+            ->getQuery()
+            ->getResult();
+    }
 }

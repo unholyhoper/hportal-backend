@@ -99,17 +99,15 @@ class MedecineController extends AbstractFOSRestController
      */
     public function updateMedecine(Request $request, $id)
     {
-        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $entityManager = $this->getDoctrine()->getManager();
+        $medecine = $this->getDoctrine()->getRepository(Medecine::class)->find($id);
         $data = json_decode($request->getContent(), true);
-        $medecine = $repository->find($id);
 
         $medecine->setReference($data['reference']);
 //        $medecine->setManufacturer($data['manufacturer']);
-        $medecine->setReference($data['quantity']);
-        $medecine->setReference($data['price']);
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($medecine);
-        $em->flush();
+        $medecine->setQuantity($data['quantity']);
+        $medecine->setPrice($data['price']);
+        $entityManager->flush();
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
     /**

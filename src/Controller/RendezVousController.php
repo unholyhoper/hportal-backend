@@ -5,6 +5,7 @@ use App\Entity\RendezVous;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Form\RendezVousType;
+use App\Repository\RendezVousRepository;
 use App\Repository\RoleRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -65,9 +66,7 @@ class RendezVousController extends AbstractFOSRestController
         $data = json_decode($request->getContent(), true);
         var_dump($data);
         $medecine = $repository->find($id);
-        $doctor=$data['doctor'];
-        $user = $this->getDoctrine()->getRepository(User::class)->find($doctor['id']);
-        $medecine->setDoctor($user);
+        $medecine->setDoctor($this->getUser());
         $medecine->setDate(new \DateTime($data['date']));
         $medecine->setPriority($data['priority']);
         $medecine->setStatus($data['status']);
@@ -79,4 +78,16 @@ class RendezVousController extends AbstractFOSRestController
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
 
+    /**
+     * Lists all medecines.
+     * @Rest\Get("/getAppointmentsForCurrentUser")
+     *
+     * @return Response
+     */
+    public function getAppointmentsForCurrentUser(RendezVousRepository $rendezVousRepository)
+    {
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $movies = $repository->getAppointmentsForUser($this->get());
+        return $this->handleView($this->view($movies));
+    }
 }
