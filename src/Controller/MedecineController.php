@@ -58,7 +58,6 @@ class MedecineController extends AbstractFOSRestController
      */
     public function deleteMedecineById($id)
     {
-        echo $id;
         $repository = $this->getDoctrine()->getRepository(Medecine::class);
         $medecine = $repository->find($id);
         if ($medecine == null) {
