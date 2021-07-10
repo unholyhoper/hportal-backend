@@ -1,8 +1,11 @@
 <?php
+
 namespace App\Controller;
+
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
+use App\Repository\UserRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,6 +13,7 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Form\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
+
 /**
  * Movie controller.
  * @Route("/api", name="api_")
@@ -28,6 +32,7 @@ class UserController extends AbstractFOSRestController
         $movies = $repository->findall();
         return $this->handleView($this->view($movies));
     }
+
     /**
      * Create Movie.
      * @Rest\Post("/user")
@@ -40,7 +45,7 @@ class UserController extends AbstractFOSRestController
         $form = $this->createForm(UserType::class, $movie);
         $data = json_decode($request->getContent(), true);
         $em = $this->getDoctrine()->getManager();
-var_dump($data);
+        var_dump($data);
         $movie->setUsername($data['userName']);
         $movie->setFirstName($data['firstName']);
         $movie->setLastName($data['lastName']);
@@ -62,16 +67,25 @@ var_dump($data);
 
     /**
      * Create Movie.
-     * @Rest\Get("/user/{id}")
+     * @Rest\Get("/currentUser")
      * @param $id
      * @return Response
      */
-    public function getUserById($id)
+    public function getCurrentUser()
     {
-        $repository = $this->getDoctrine()->getRepository(User::class);
-        $user = $repository->find($id);
-
-        return $this->handleView($this->view($user));
+        $user = $this->getUser();
+        return $this->handleView(
+            $this->view(array(
+                'id' => $user->getId(),
+                'user_firstName' => $user->getFirstName(),
+                'user_firstName' => $user->getFirstName(),
+                'cin' => $user->getCin(),
+                'address' => $user->getAddress(),
+                'country' => $user->getCountry(),
+                'email' => $user->getEmail(),
+                'phone' => $user->getPhone(),
+            ))
+        );
     }
 
     /**
@@ -86,11 +100,33 @@ var_dump($data);
         $delegateCount = $roleRepository->countDelegate();
         $doctorCount = $roleRepository->countDoctors();
         $clientCount = $roleRepository->countClient();
-        return $this->handleView($this->view(array('doctorCount'=>$doctorCount,
-            'delegateCount'=>$delegateCount,
-            'clientCount'=>$clientCount,
+        return $this->handleView($this->view(array('doctorCount' => $doctorCount,
+            'delegateCount' => $delegateCount,
+            'clientCount' => $clientCount,
         )));
     }
 
-
+    /**
+     * Create Movie.
+     * @Rest\Put("/user")
+     * @return Response
+     */
+    public function updateCurrentUser(Request $request)
+    {
+        $user = $this->getUser();
+        $data = json_decode($request->getContent(), true);
+        $user->setUsername($data['userName']);
+        $user->setPassword($data['password']);
+        $user->setFirstName($data['first_name']);
+        $user->setLastName($data['last_name']);
+        $user->setCin($data['cin']);
+        $user->setAddress($data['address']);
+        $user->setCountry($data['country']);
+        $user->setEmail($data['email']);
+        $user->setPhone($data['phone']);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
 }

@@ -57,4 +57,14 @@ class RendezVousRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function getAppointmentsById($id)
+    {
+        return $this->createQueryBuilder('r')
+            ->select('r')
+            ->andWhere('r.id = :val')
+            ->setParameter('val', $id)
+            ->getQuery()
+            ->getResult();
+    }
 }
