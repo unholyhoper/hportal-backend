@@ -173,6 +173,46 @@ class RendezVousController extends AbstractFOSRestController
 
             )));
     }
+    /**
+     * Lists all medecines.
+     * @Rest\Get("/canValidateAppointment/{id}")
+     *
+     * @return Response
+     */
+    public function canValidateAppointment($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $appointment = $repository->find($id);
+        $canAssign = false;
+        if ($appointment->getDoctor() == $this->getUser() && in_array('ROLE_DOCTOR', $this->getUser()->getRoles()) && $appointment->getStatus()=='PENDING') {
+            $canAssign = true;
+        }
+        return $this->handleView(
+            $this->view(array(
+                'canValidate' => $canAssign,
+
+            )));
+    }
+    /**
+     * Lists all medecines.
+     * @Rest\Get("/canReopenOppointment/{id}")
+     *
+     * @return Response
+     */
+    public function canReopenOppointment($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $appointment = $repository->find($id);
+        $canAssign = false;
+        if ($appointment->getPatient() == $this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles()) && $appointment->getStatus()=='REJECTED') {
+            $canAssign = true;
+        }
+        return $this->handleView(
+            $this->view(array(
+                'canReopen' => $canAssign,
+
+            )));
+    }
 
     /**
      * Cancel an appointment.
@@ -208,7 +248,7 @@ class RendezVousController extends AbstractFOSRestController
 
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $appointment = $repository->find($id);
-        if ($appointment->getDoctor() == $this->getUser()) {
+        if ($appointment->getDoctor() == $this->getUser() && ($appointment->getStatus()=="PENDING" ||$appointment->getStatus()=="REOPENED" ) ) {
             $canReject = true;
         }
         return $this->handleView(
@@ -234,6 +274,51 @@ class RendezVousController extends AbstractFOSRestController
 
 
         $appointment->setStatus("REJECTED");
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($appointment);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
+
+    /**
+     * Cancel an appointment.
+     * @Rest\Put("/reopenAppointment/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function reopenAppointment($id)
+    {
+
+        $user = $this->getUser();
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $appointment = $repository->find($id);
+
+
+        $appointment->setStatus("REOPENED");
+
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($appointment);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
+
+
+    /**
+     * Cancel an appointment.
+     * @Rest\Put("/validateAppointment/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function validateAppointment($id)
+    {
+
+        $user = $this->getUser();
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $appointment = $repository->find($id);
+
+
+        $appointment->setStatus("IN FORCE");
 
         $em = $this->getDoctrine()->getManager();
         $em->persist($appointment);
