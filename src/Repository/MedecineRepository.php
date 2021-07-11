@@ -64,7 +64,7 @@ class MedecineRepository extends ServiceEntityRepository
         if ($manufacturer != null) {
             $query = $query
                 ->andWhere('m.manufacturer = :val1')
-                ->setParameter('val1', 'TTTTT');
+                ->setParameter('val1', $manufacturer);
         }
         if ($reference != null) {
             $query = $query
