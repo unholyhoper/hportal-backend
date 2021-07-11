@@ -164,7 +164,7 @@ class RendezVousController extends AbstractFOSRestController
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $appointment = $repository->find($id);
         $canAssign = false;
-        if ($appointment->getDoctor() == null && $appointment->getDoctor() != $this->getUser() && in_array('ROLE_DOCTOR', $this->getUser()->getRoles())) {
+        if ($appointment->getDoctor() == null && in_array('ROLE_DOCTOR', $this->getUser()->getRoles())) {
             $canAssign = true;
         }
         return $this->handleView(
