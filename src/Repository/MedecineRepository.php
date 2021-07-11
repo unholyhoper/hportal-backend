@@ -55,4 +55,24 @@ class MedecineRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();;
     }
+
+    public function getMedecinesByManufacturerAndReference($manufacturer, $reference)
+    {
+        $query = $this->createQueryBuilder('m')
+            ->select('m');
+
+        if ($manufacturer != null) {
+            $query = $query
+                ->andWhere('m.manufacturer = :val1')
+                ->setParameter('val1', 'TTTTT');
+        }
+        if ($reference != null) {
+            $query = $query
+                ->andWhere('m.reference = :val2')
+                ->setParameter('val2', $reference);
+        }
+        return $query->getQuery()->getResult();
+    }
+
+
 }

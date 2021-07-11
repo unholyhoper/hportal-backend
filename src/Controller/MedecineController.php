@@ -9,6 +9,8 @@ use App\Form\MedecineType;
 use App\Repository\MedecineRepository;
 use App\Repository\RoleRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
+use FOS\RestBundle\Request\ParamFetcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -22,18 +24,6 @@ use FOS\RestBundle\Controller\FOSRestController;
  */
 class MedecineController extends AbstractFOSRestController
 {
-    /**
-     * Lists all medecines.
-     * @Rest\Get("/allMedecines")
-     *
-     * @return Response
-     */
-    public function allMedecines()
-    {
-        $repository = $this->getDoctrine()->getRepository(Medecine::class);
-        $movies = $repository->findall();
-        return $this->handleView($this->view($movies));
-    }
 
     /**
      * Get a Medecine by ID.
@@ -121,4 +111,24 @@ class MedecineController extends AbstractFOSRestController
 //        ));
         return $this->handleView($this->view(array("doctorCount"=>$doctorCount)));
     }
+
+
+    /**
+     * @Rest\Get("/allMedecines")
+     * @return Response
+     */
+    public function criteria(Request $request)
+    {
+        $manufacturer = $request->query->get('manufacturer');
+        $reference = $request->query->get('reference');
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+
+        $medecines = $repository->getMedecinesByManufacturerAndReference($manufacturer,$reference);
+
+        return $this->handleView($this->view($medecines));
+
+
+    }
+
+
 }
