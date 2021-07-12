@@ -75,6 +75,11 @@ class User implements UserInterface
      */
     private $phone;
 
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $birthDate;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -111,7 +116,27 @@ class User implements UserInterface
 
     public function setRoles(array $roles): self
     {
-        $this->roles = $roles;
+        $role = $roles[0];
+        $role = strtoupper($role);
+        echo "qsdfmlqksdfj";
+        echo $role;
+        switch ($role){
+            case "USER":
+                $role='ROLE_USER';
+                break;
+            case "CLIENT":
+                $role='ROLE_USER';
+                break;
+            case "ADMIN":
+                $role='ROLE_ADMIN';
+                break;
+            case "DOCTOR":
+                $role='ROLE_DOCTOR';
+                break;
+        }
+        $roles[] = $role;
+
+        $this->roles = array_unique($roles);
 
         return $this;
     }
@@ -243,6 +268,18 @@ class User implements UserInterface
     public function setPhone(?string $phone): self
     {
         $this->phone = $phone;
+
+        return $this;
+    }
+
+    public function getBirthDate(): ?\DateTimeInterface
+    {
+        return $this->birthDate;
+    }
+
+    public function setBirthDate(?\DateTimeInterface $birthDate): self
+    {
+        $this->birthDate = $birthDate;
 
         return $this;
     }
