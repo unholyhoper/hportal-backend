@@ -127,7 +127,24 @@ class MedecineController extends AbstractFOSRestController
 
         return $this->handleView($this->view($medecines));
 
+    }
 
+    /**
+     * @Rest\Post("/medecinePhoto/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function setPhoto(Request $request, $id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $medecine = $repository->find($id);
+        $data = json_decode($request->getContent(), true);
+        $photo = $data['photo'];
+        $medecine->setPhoto($photo);
+        $em = $this->getDoctrine()->getManager();
+        $em->remove($medecine);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'OK'], Response::HTTP_OK));
     }
 
 
