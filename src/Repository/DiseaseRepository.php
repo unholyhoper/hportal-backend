@@ -47,4 +47,13 @@ class DiseaseRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function getDiseasesNames()
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d.name')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

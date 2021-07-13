@@ -43,5 +43,17 @@ class DiseaseController extends AbstractFOSRestController
 
         return $this->handleView($this->view($disease));
     }
+    /**
+     * Get a Medecine by ID.
+     * @Rest\Get("/diseaseNames")
+     * @return Response
+     */
+    public function getDiseaseNames()
+    {
+        $repository = $this->getDoctrine()->getRepository(Disease::class);
+        $disease = $repository->getDiseasesNames();
+
+        return $this->handleView($this->view($disease));
+    }
 
 }
