@@ -80,6 +80,16 @@ class User implements UserInterface
      */
     private $birthDate;
 
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     */
+    private $profilePicture;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $enabled;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -134,9 +144,9 @@ class User implements UserInterface
                 $role='ROLE_DOCTOR';
                 break;
         }
-        $roles[] = $role;
+        $roles1[] = $role;
 
-        $this->roles = array_unique($roles);
+        $this->roles = array_unique($roles1);
 
         return $this;
     }
@@ -280,6 +290,30 @@ class User implements UserInterface
     public function setBirthDate(?\DateTimeInterface $birthDate): self
     {
         $this->birthDate = $birthDate;
+
+        return $this;
+    }
+
+    public function getProfilePicture()
+    {
+        return $this->profilePicture;
+    }
+
+    public function setProfilePicture($profilePicture): self
+    {
+        $this->profilePicture = $profilePicture;
+
+        return $this;
+    }
+
+    public function isEnabled(): ?bool
+    {
+        return $this->enabled;
+    }
+
+    public function setEnabled(?bool $enabled): self
+    {
+        $this->enabled = $enabled;
 
         return $this;
     }

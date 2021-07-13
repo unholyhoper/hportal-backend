@@ -12,6 +12,7 @@ security:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
     login:
+      user_checker: App\Security\UserChecker
       pattern: ^/api/login_check
       stateless: true
       anonymous: true
