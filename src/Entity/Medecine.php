@@ -148,7 +148,11 @@ class Medecine
 
     public function getImage()
     {
-        return $this->image;
+        if ($this->image!=null) {
+            $data = stream_get_contents($this->image);
+            return $data;
+        }
+        return null;
     }
 
     public function setImage($image): self
@@ -157,4 +161,23 @@ class Medecine
 
         return $this;
     }
+
+
+    public function getImageBase64(): ?string
+    {
+        if (null === $this->image) {
+            return null;
+        }
+
+        if (!isset($this->imageBase64)) {
+            $data = stream_get_contents($this->image);
+//            echo $data;
+//            fclose($this->image);
+//            $this->imageBase64 = base64_encode($data);
+        }
+        return $data;
+
+//        return $this->imageBase64;
+    }
+
 }

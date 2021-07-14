@@ -147,5 +147,20 @@ class MedecineController extends AbstractFOSRestController
         return $this->handleView($this->view(['status' => 'OK'], Response::HTTP_OK));
     }
 
+    /**
+     * Get a Medecine by ID.
+     * @Rest\Get("/medecine/image/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function getImageForMedecine($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $medecine = $repository->find($id);
+
+        return $this->handleView($this->view(
+            array("image"=>$medecine->getImageBase64())
+        ));
+    }
 
 }
