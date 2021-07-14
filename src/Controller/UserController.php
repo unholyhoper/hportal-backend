@@ -226,4 +226,30 @@ class UserController extends AbstractFOSRestController
         $entityManager->flush();
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
+
+    /**
+     * Create Movie.
+     * @Rest\Put("/user/{id}")
+     * @return Response
+     */
+    public function updateUser(Request $request,$id)
+    {
+        $repository = $this->getDoctrine()->getRepository(Role::class);
+        $user = $repository->find($id);
+        $data = json_decode($request->getContent(), true);
+        $user->setAddress($data['address']);
+        $user->setCin($data['cin']);
+        $user->setPhone($data['phone']);
+        $user->setFirstName($data['first_name']);
+        $user->setLastName($data['last_name']);
+        $user->setEmail($data['email']);
+        if($user->getRoles()[0] == 'ROLE_DOCTOR'){
+            $user->setLastName($data['medical_serial']);
+        }
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
+
 }
