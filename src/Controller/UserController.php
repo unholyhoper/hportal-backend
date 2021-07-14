@@ -151,12 +151,28 @@ class UserController extends AbstractFOSRestController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $users = $repository->findAll();
-            $usersArray = array_filter(
-                $users,
-                function ($user) {
-                    return $user->getRoles()[0]== 'ROLE_DOCTOR';
-                });
-        return $this->handleView($this->view($usersArray));
+        $usersArray = array_filter(
+            $users,
+            function ($user) {
+                return $user->getRoles()[0] == 'ROLE_DOCTOR';
+            });
+
+
+        if ($users) {
+            foreach ($usersArray as $user) {
+                $response[] = [
+                    'id' => $user->getId(),
+                    'username' => $user->getId(),
+                    'firstname' => $user->getFirstName(),
+                    'lastname' => $user->getLastName(),
+                    'email' => $user->getEmail(),
+                    'enabled' => $user->isEnabled(),
+                ];
+            }
+
+
+            return $this->handleView($this->view($response));
+        }
     }
 
     /**
@@ -169,15 +185,45 @@ class UserController extends AbstractFOSRestController
     {
         $repository = $this->getDoctrine()->getRepository(User::class);
         $users = $repository->findAll();
-            $usersArray = array_filter(
-                $users,
-                function ($user) {
-                    return $user->getRoles()[0]== 'ROLE_DOCTOR';
-                });
-        return $this->handleView($this->view($usersArray));
+        $usersArray = array_filter(
+            $users,
+            function ($user) {
+                return $user->getRoles()[0] == 'ROLE_USER';
+            });
+
+
+        if ($users) {
+            foreach ($usersArray as $user) {
+                $response[] = [
+                    'id' => $user->getId(),
+                    'username' => $user->getUsername(),
+                    'firstname' => $user->getFirstName(),
+                    'lastname' => $user->getLastName(),
+                    'email' => $user->getEmail(),
+                    'enabled' => $user->isEnabled(),
+                ];
+            }
+
+
+            return $this->handleView($this->view($response));
+        }
     }
 
-
-
-
+    /**
+     * Update a user enabled field.
+     * @Rest\Put("/user/enabled/{id}")
+     * @param $id
+     * @return Response
+     */
+    public function updateMedecine(Request $request, $id)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $data = json_decode($request->getContent(), true);
+        $enabled = $data['enabled'];
+        $user->setEnabled($enabled);
+        $entityManager->persist($user);
+        $entityManager->flush();
+        return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
 }

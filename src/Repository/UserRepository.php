@@ -53,7 +53,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
     */
 
-    /*
+
     public function findOneBySomeField($value): ?User
     {
         return $this->createQueryBuilder('u')
@@ -63,5 +63,45 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->getOneOrNullResult()
         ;
     }
-    */
+
+
+//    public function findByRoleThatSucksLess(string $role)
+//    {
+//        $teachers = $this->createQueryBuilder('qsdf')
+//            ->select('t.username')
+//            ->from('App\Entity\User', 't')
+//            ->where('t.roles LIKE :role')
+//            ->setParameter('role', '%ROLE_ADMIN%')
+//            ->getQuery()
+//            ->getResult();
+//    }
+//    public function findByRoleThatSucksLess(string $role)
+//    {
+//        // The ResultSetMapping maps the SQL result to entities
+//        $rsm = $this->createResultSetMappingBuilder('s');
+//
+//        $rawQuery = sprintf(
+//            'SELECT %s
+//                    FROM user s
+//                    WHERE s.roles::jsonb ?? :role',
+//            $rsm->generateSelectClause()
+//        );
+//
+//        $query = $this->getEntityManager()->createNativeQuery($rawQuery, $rsm);
+//        $query->setParameter('role', $role);
+//        return $query->getResult();
+//    }
+
+
+
+//    public function findByRoleThatSucksLess(string $role)
+//    {
+//        $role = mb_strtoupper($role);
+//
+//        return $this->createQueryBuilder('u')
+//            ->andWhere('JSON_CONTAINS(u.roles, :role) = 1')
+//            ->setParameter('role', '"DOCTOR_ROLE"')
+//            ->getQuery()
+//            ->getResult();
+//    }
 }
