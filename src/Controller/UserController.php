@@ -6,6 +6,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\Criteria;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -138,4 +139,45 @@ class UserController extends AbstractFOSRestController
         $em->flush();
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
+
+
+    /**
+     * Lists all Movies.
+     * @Rest\Get("/user/doctors")
+     *
+     * @return Response
+     */
+    public function getAllDoctors()
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+            $usersArray = array_filter(
+                $users,
+                function ($user) {
+                    return $user->getRoles()[0]== 'ROLE_DOCTOR';
+                });
+        return $this->handleView($this->view($usersArray));
+    }
+
+    /**
+     * Lists all Movies.
+     * @Rest\Get("/user/users")
+     *
+     * @return Response
+     */
+    public function getAllUsers()
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+            $usersArray = array_filter(
+                $users,
+                function ($user) {
+                    return $user->getRoles()[0]== 'ROLE_DOCTOR';
+                });
+        return $this->handleView($this->view($usersArray));
+    }
+
+
+
+
 }
