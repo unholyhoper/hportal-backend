@@ -162,7 +162,7 @@ class UserController extends AbstractFOSRestController
             foreach ($usersArray as $user) {
                 $response[] = [
                     'id' => $user->getId(),
-                    'username' => $user->getId(),
+                    'username' => $user->getUsername(),
                     'firstname' => $user->getFirstName(),
                     'lastname' => $user->getLastName(),
                     'email' => $user->getEmail(),
