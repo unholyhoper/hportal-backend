@@ -19,17 +19,21 @@ use FOS\RestBundle\Controller\FOSRestController;
 class MaterialController extends AbstractFOSRestController
 {
 
-    /**
-     * Lists all Material.
+    
+        /**
      * @Rest\Get("/allMaterial")
-     *
      * @return Response
      */
-    public function allMaterial()
+    public function criteria(Request $request)
     {
+        $type = $request->query->get('type');
+        $name = $request->query->get('name');
         $repository = $this->getDoctrine()->getRepository(Material::class);
-        $materials = $repository->findall();
-        return $this->handleView($this->view($materials));
+
+        $material = $repository->getMaterialByTypaAndName($type,$name);
+
+        return $this->handleView($this->view($material));
+
     }
     /**
      * @Rest\Post("/MaterialPhoto/{id}")
@@ -78,7 +82,7 @@ class MaterialController extends AbstractFOSRestController
     }
     /**
      * Get a material by ID.
-     * @Rest\Get("/diseaseNames")
+     * @Rest\Get("/MaterialNames")
      * @return Response
      */
     public function getMaterialNames()
@@ -109,6 +113,7 @@ class MaterialController extends AbstractFOSRestController
         }
         return $this->handleView($this->view($form->getErrors()));
     }
+    
 
     /**
      * Update a Material.

@@ -47,4 +47,21 @@ class MaterialRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function getMaterialByTypaAndName($type, $name)
+    {
+        $query = $this->createQueryBuilder('m')
+            ->select('m');
+
+        if ($type != null) {
+            $query = $query
+                ->andWhere('m.type = :val1')
+                ->setParameter('val1', $type);
+        }
+        if ($name != null) {
+            $query = $query
+                ->andWhere('m.name = :val2')
+                ->setParameter('val2', $name);
+        }
+        return $query->getQuery()->getResult();
+    }
 }
