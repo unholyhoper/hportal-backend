@@ -96,6 +96,7 @@ class MedecineController extends AbstractFOSRestController
 //        $medecine->setManufacturer($data['manufacturer']);
         $medecine->setQuantity($data['quantity']);
         $medecine->setPrice($data['price']);
+        $entityManager->persist($medecine);
         $entityManager->flush();
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }

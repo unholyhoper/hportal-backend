@@ -173,6 +173,7 @@ class RendezVousController extends AbstractFOSRestController
 
             )));
     }
+
     /**
      * Lists all medecines.
      * @Rest\Get("/canValidateAppointment/{id}")
@@ -184,7 +185,7 @@ class RendezVousController extends AbstractFOSRestController
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $appointment = $repository->find($id);
         $canAssign = false;
-        if ($appointment->getDoctor() == $this->getUser() && in_array('ROLE_DOCTOR', $this->getUser()->getRoles()) && $appointment->getStatus()=='PENDING') {
+        if ($appointment->getDoctor() == $this->getUser() && in_array('ROLE_DOCTOR', $this->getUser()->getRoles()) && ($appointment->getStatus() == 'PENDING' || $appointment->getStatus() == 'REOPENED')) {
             $canAssign = true;
         }
         return $this->handleView(
@@ -193,6 +194,28 @@ class RendezVousController extends AbstractFOSRestController
 
             )));
     }
+
+    /**
+     * Lists all medecines.
+     * @Rest\Get("/canCancelAppointment/{id}")
+     *
+     * @return Response
+     */
+    public function canCancelAppointment($id)
+    {
+        $repository = $this->getDoctrine()->getRepository(RendezVous::class);
+        $appointment = $repository->find($id);
+        $canAssign = false;
+        if ($appointment->getPatient() == $this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles()) && $appointment->getStatus() != 'INFORCE') {
+            $canAssign = true;
+        }
+        return $this->handleView(
+            $this->view(array(
+                'canCancel' => $canAssign,
+
+            )));
+    }
+
     /**
      * Lists all medecines.
      * @Rest\Get("/canReopenOppointment/{id}")
@@ -204,7 +227,7 @@ class RendezVousController extends AbstractFOSRestController
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $appointment = $repository->find($id);
         $canAssign = false;
-        if ($appointment->getPatient() == $this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles()) && $appointment->getStatus()=='REJECTED') {
+        if ($appointment->getPatient() == $this->getUser() && in_array('ROLE_USER', $this->getUser()->getRoles()) && $appointment->getStatus() == 'REJECTED') {
             $canAssign = true;
         }
         return $this->handleView(
@@ -248,7 +271,7 @@ class RendezVousController extends AbstractFOSRestController
 
         $repository = $this->getDoctrine()->getRepository(RendezVous::class);
         $appointment = $repository->find($id);
-        if ($appointment->getDoctor() == $this->getUser() && ($appointment->getStatus()=="PENDING" ||$appointment->getStatus()=="REOPENED" ) ) {
+        if ($appointment->getDoctor() == $this->getUser() && ($appointment->getStatus() == "PENDING" || $appointment->getStatus() == "REOPENED")) {
             $canReject = true;
         }
         return $this->handleView(
