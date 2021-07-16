@@ -234,7 +234,7 @@ class UserController extends AbstractFOSRestController
      */
     public function updateUser(Request $request,$id)
     {
-        $repository = $this->getDoctrine()->getRepository(Role::class);
+        $repository = $this->getDoctrine()->getRepository(User::class);
         $user = $repository->find($id);
         $data = json_decode($request->getContent(), true);
         $user->setAddress($data['address']);
@@ -244,7 +244,7 @@ class UserController extends AbstractFOSRestController
         $user->setLastName($data['last_name']);
         $user->setEmail($data['email']);
         if($user->getRoles()[0] == 'ROLE_DOCTOR'){
-            $user->setLastName($data['medical_serial']);
+            $user->setMedicalSerial($data['medical_serial']);
         }
         $em = $this->getDoctrine()->getManager();
         $em->persist($user);
