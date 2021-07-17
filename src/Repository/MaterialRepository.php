@@ -47,6 +47,13 @@ class MaterialRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function countMaterial()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
     public function getMaterialByTypaAndName($type, $name)
     {
         $query = $this->createQueryBuilder('m')
