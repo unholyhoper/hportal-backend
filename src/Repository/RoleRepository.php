@@ -54,7 +54,7 @@ class RoleRepository extends ServiceEntityRepository
             ->andWhere('r.value = :val')
             ->setParameter('val', "DOCTOR")
             ->getQuery()
-            ->getSingleScalarResult();;
+            ->getSingleScalarResult();
     }
 
     public function countClient()
@@ -64,7 +64,7 @@ class RoleRepository extends ServiceEntityRepository
             ->andWhere('r.value = :val')
             ->setParameter('val', "CLIENT")
             ->getQuery()
-            ->getSingleScalarResult();;
+            ->getSingleScalarResult();
     }
 
     public function countDelegate()
@@ -74,7 +74,7 @@ class RoleRepository extends ServiceEntityRepository
             ->andWhere('r.value = :val')
             ->setParameter('val', "DELEGATE")
             ->getQuery()
-            ->getSingleScalarResult();;
+            ->getSingleScalarResult();
     }
 
 }

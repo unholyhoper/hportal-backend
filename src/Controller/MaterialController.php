@@ -12,6 +12,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Form\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
+use App\Repository\MaterialRepository;
+
 /**
  * Movie controller.
  * @Route("/api", name="api_")
@@ -153,6 +155,16 @@ class MaterialController extends AbstractFOSRestController
         $em->remove($material);
         $em->flush();
         return $this->handleView($this->view(['status' => 'OK'], Response::HTTP_OK));
+    }
+    /**
+     * Count Material.
+     * @Rest\Get("/countMaterial")
+     * @return Response
+     */
+    public function getMaterialCount(MaterialRepository $mateialRepository){
+        $repository = $this->getDoctrine()->getRepository(Material::class);
+        $materialCount = $repository->countMaterial();
+        return $this->handleView($this->view(array("MaterialCount"=>$materialCount)));
     }
 
 }
