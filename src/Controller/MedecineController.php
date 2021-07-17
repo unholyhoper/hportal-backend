@@ -163,4 +163,16 @@ class MedecineController extends AbstractFOSRestController
         ));
     }
 
+    /**
+     * Get a Medecine by Name.
+     * @Rest\Get("/medecinesNames")
+     * @return Response
+     */
+    public function getMedecinesNames()
+    {
+        $repository = $this->getDoctrine()->getRepository(Medecine::class);
+        $medecines = $repository->getMedecineNames();
+
+        return $this->handleView($this->view($medecines));
+    }
 }

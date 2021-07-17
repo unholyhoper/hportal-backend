@@ -4,6 +4,7 @@ use App\Entity\Disease;
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
+use App\Repository\DiseaseRepository;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,6 +55,16 @@ class DiseaseController extends AbstractFOSRestController
         $disease = $repository->getDiseasesNames();
 
         return $this->handleView($this->view($disease));
+    }
+    /**
+     * Count Material.
+     * @Rest\Get("/countDisease")
+     * @return Response
+     */
+    public function getDieseaseCount(DiseaseRepository $diseaseRepository){
+        $repository = $this->getDoctrine()->getRepository(Disease::class);
+        $DieseaseCount = $repository->countDiesease();
+        return $this->handleView($this->view(array("DiseaseCount"=>$DieseaseCount)));
     }
 
 }
