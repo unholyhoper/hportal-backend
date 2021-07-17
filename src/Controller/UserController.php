@@ -300,4 +300,38 @@ class UserController extends AbstractFOSRestController
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
 
+    /**
+     * Lists all Movies.
+     * @Rest\Get("/user/delegates")
+     *
+     * @return Response
+     */
+    public function getAllDelegates()
+    {
+        $repository = $this->getDoctrine()->getRepository(User::class);
+        $users = $repository->findAll();
+        $usersArray = array_filter(
+            $users,
+            function ($user) {
+                return $user->getRoles()[0] == 'ROLE_DOCTOR';
+            });
+
+
+        if ($users) {
+            foreach ($usersArray as $user) {
+                $response[] = [
+                    'id' => $user->getId(),
+                    'username' => $user->getUsername(),
+                    'firstname' => $user->getFirstName(),
+                    'lastname' => $user->getLastName(),
+                    'email' => $user->getEmail(),
+                    'enabled' => $user->isEnabled(),
+                ];
+            }
+
+
+            return $this->handleView($this->view($response));
+        }
+    }
+
 }
