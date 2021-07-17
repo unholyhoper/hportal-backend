@@ -55,5 +55,13 @@ class DiseaseRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    public function countDiesease()
+    {
+        return $this->createQueryBuilder('r')
+            ->select('count(r.id)')
+            ->getQuery()
+            ->getSingleScalarResult();;
+    }
+
 
 }

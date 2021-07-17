@@ -55,6 +55,13 @@ class MedecineRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();;
     }
+    public function getMedecineNames()
+    {
+        return $this->createQueryBuilder('d')
+            ->select('d.name')
+            ->getQuery()
+            ->getResult();
+    }
 
     public function getMedecinesByManufacturerAndReference($manufacturer, $reference)
     {
