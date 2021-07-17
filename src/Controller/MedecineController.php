@@ -102,15 +102,13 @@ class MedecineController extends AbstractFOSRestController
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
     }
     /**
-     * Create Movie.
+     * Count Medecines.
      * @Rest\Get("/countMedecines")
      * @return Response
      */
     public function getMedecinesCount(MedecineRepository $medecineRepository){
         $repository = $this->getDoctrine()->getRepository(Medecine::class);
         $doctorCount = $repository->countMedecines();
-//        $response = array("doctorCount"=>$doctorCount,
-//        ));
         return $this->handleView($this->view(array("doctorCount"=>$doctorCount)));
     }
 

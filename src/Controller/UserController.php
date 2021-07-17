@@ -15,6 +15,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Form\UserType;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+use App\Services\SecurityService;
 
 /**
  * Movie controller.
@@ -22,6 +23,18 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
  */
 class UserController extends AbstractFOSRestController
 {
+    private $serviceSecurity;
+
+
+    /**
+     * UserController constructor.
+     */
+    public function __construct(SecurityService $securityService)
+    {
+        $this->serviceSecurity = $securityService;
+    }
+
+
     /**
      * Lists all Movies.
      * @Rest\Get("/users")
@@ -138,6 +151,41 @@ class UserController extends AbstractFOSRestController
         $em->persist($user);
         $em->flush();
         return $this->handleView($this->view(['status' => 'ok'], Response::HTTP_CREATED));
+    }
+
+    /**
+     * Create Movie.
+     * @Rest\Put("/user/forgotPassword")
+     * @return Response
+     */
+    public function putForgetPassword(Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    {
+        // var_dump('hehahe'); exit();
+        $token = $request->query->get('token');
+
+        $data = json_decode($request->getContent(), true);
+
+        if ($token == $this->serviceSecurity->encodeEmail($data['username'])) {
+
+            $em = $this->getDoctrine()->getManager();
+            $user = $em->getRepository(User::class)->findOneBy(['username' => $data['username']]);
+
+
+            if ($passwordEncoder->isPasswordValid($user, $data['actualPassword'])) {
+                $user->setUsername($data['username']);
+                $user->setPassword($passwordEncoder->encodePassword($user, $data['newPassword']));
+                $em->persist($user);
+                $em->flush();
+
+                return $this->handleView($this->view(['message' => 'Password changed successfully','status' => 'ok','status'=>200], Response::HTTP_OK));
+            } else {
+
+                return $this->handleView($this->view(['message' => 'Actual password is incorrect','status'=>400], Response::HTTP_BAD_REQUEST));
+            }
+
+
+        }
+        return $this->handleView($this->view(['message' => 'Error','status'=>401], Response::HTTP_UNAUTHORIZED));
     }
 
 
